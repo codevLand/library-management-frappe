@@ -1,0 +1,34 @@
+<!-- <div class="py-8 row"> -->
+{% if doc.published %}
+<div class="col-sm-12 col-md-4">
+	<div class="card">
+		<img src="{{ doc.image }}" alt="{{ doc.article_name }}">
+
+		<div class="card-body">
+			<a class="font-size-lg" href="{{ doc.route }}">{{ doc.article_name }}</a>
+			<p class="text-muted">By {{ doc.author }}</p>
+			<div class="row justify-content-between">
+				<div class="col-4">
+					{%- if doc.status == 'Available' -%}
+					<span id="span{{ doc.name }}" class='badge badge-{{ "success" if doc.status == "Available" else "primary"}}'>Available</span>
+					{%- elif status == 'Issued' -%}
+					<span id="span{{ doc.name }}" class="badge badge-primary">Issued</span">
+					{%- endif -%}
+				</div>
+				<div class="col-4">
+					{% if doc.status == 'Issued' %}
+					{% else %}
+					<!-- <a href="{{ doc.route }}" class="btn btn-primary">Borrow</a> -->
+					{% if frappe.session.user == 'Guest' %}
+						<button id="{{ doc.name }}" onclick="borrowArticle(`{{ doc.name, frappe.session.user }}`)" class="btn btn-primary" >Borrow</button>
+						{% else %}
+							<button id="{{ doc.name }}" onclick="borrowArticle(`{{ doc.name }}`, `{{ frappe.session.user }}`)" class="btn btn-primary" >Borrow</button>
+						{% endif %}
+					{% endif %}		
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}
+<!-- </div> -->
