@@ -6,9 +6,11 @@ Library Management System
 
 1. Install frappe and its prerequisites [here]('https://frappeframework.com/docs/user/en/installation')
 2. Clone this repo using: `bench get-app https://github.com/codevLand/library-management-frappe.git`
-3. Install site: `bench --site library.test --force reinstall`
+3. Install site: `bench new-site library.test` and bench to install
 4. Link library app to library.test site: `bench --site library.test install-app library_management`
-5. Run library management: `bench start`
+5. Add library.test on `nanno /etc/hosts/`
+6. Run library management: `bench start`
+7. goto `library.test:8000`
 
 #### License
 
