@@ -10,11 +10,13 @@ class Article(WebsiteGenerator):
 	@frappe.whitelist()
 	def issued_article_status(self):
 		# set article status to issued
-		print(self)
 		update = frappe.db.set_value('Article', self.name, 'status', 'Issued')
 
 		return update
 
-	def on_click(self):
-		print(self) 
+	@frappe.whitelist()
+	def get_article(self):
+		return self
 
+@frappe.whitelist()
+def 

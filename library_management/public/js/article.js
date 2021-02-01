@@ -9,16 +9,38 @@ async function borrowArticle(name, user) {
 }
 
 function checkMembership(data) {
-    alert(data.user)
+    alert(data.user, data.name)
+    console.log(data);
+    // checkUserRole(data.user)
 }
 
-
+function checkUserRole(user) {
+    let getData = {
+        method: 'frappe.client.get_value',
+        args: {
+            doctype: 'User',
+            filters: {
+                email: user,
+            },
+            fields: ["status", "first_name", "last_name", "role_permission_name"]
+        },
+        callback: function(r) {
+            console.log(r);
+            document.getElementById(`span${name}`).className = "badge badge-primary";
+            document.getElementById(`span${name}`).innerText = "Issued";
+            document.getElementById(name).hidden = true;
+        },
+        error: function(r) {
+            console.log("update error", r);
+            // put alert???
+        },
+    }
+}
 
 function request(name, user) {
     let updateData = {
         method: 'frappe.client.set_value',
         args: {
-            role_profile: user,
             doctype: 'Article',
             "name": name,
             "fieldname": "status",
@@ -41,7 +63,6 @@ function request(name, user) {
         method: 'frappe.client.get_value',
         args: {
             doctype: 'Article',
-            role_profile: user,
             filters: {
                 name,
             },
