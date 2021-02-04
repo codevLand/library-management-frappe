@@ -14,7 +14,3 @@ class Article(WebsiteGenerator):
 
 		return update
 
-	@frappe.whitelist()
-	def get_article(self):
-		return self
-
