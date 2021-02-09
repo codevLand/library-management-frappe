@@ -2,8 +2,9 @@
 {% if doc.published %}
 <div class="col-sm-12 col-md-4">
 	<div class="card">
-		<img src="{{ doc.image }}" alt="{{ doc.article_name }}">
-
+		{% if doc.image %}
+			<img src="{{ doc.image }}" alt="{{ doc.name }}">
+		{% endif %}
 		<div class="card-body">
 			<div>
 				{% if doc.status == 'Available' %}
