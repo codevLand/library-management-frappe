@@ -19,6 +19,12 @@ def article(*args, **kwargs):
         if article:
             return gf.response(False, {}, "Failed to create article", "Article already exists", "")
 
+        print({
+            "method": frappe.request.method,
+            "url": frappe.request.url,
+            "payload": kwargs
+        })
+
         images = gf.add_images(kwargs)
 
         print("creating document...")
@@ -50,7 +56,7 @@ def article(*args, **kwargs):
 
         article.image = images[0].file_url if len(images) > 0 else None
 
-        article.insert(ignore_permissions=1)
+        article.insert()
 
         # article.submit()
         return gf.response(True, article, "", "Created successfully.", "")
@@ -107,7 +113,7 @@ def update_article(*args, **kwargs):
         article.image = images[0].file_url if len(images) > 0 else None
 
         print("updating document...")
-        article.save(ignore_permissions=1)
+        article.save()
         
         # article.submit()
         return gf.response(True, article, "", "Updated successfully.", "")
@@ -129,7 +135,10 @@ def get_one(*args, **kwargs):
         kwargs["filters"] = { "name": kwargs.get("docname") }
 
         article = get_all(kwargs)
-        return gf.response(True, article[0], "", "", "")
+        if len(article) > 0:
+            return gf.response(True, article[0], "", "", "")
+        else:
+            return gf.response(False, {}, "Article does not exist.", "Article not found.", 404)
 
     except Exception as e:
         return gf.response(False, {}, e, "Something went wrong", 500)
@@ -171,7 +180,7 @@ def get_all(*args, **kwargs):
             article = frappe.db.get_list(
                 doctype, 
                 filters=filters, 
-                fields=fields
+                fields=fields,
             )
         else:
             print("get all")
@@ -194,3 +203,25 @@ def get_all(*args, **kwargs):
             raise Exception(e)
         else:
             return gf.response(False, {}, e, "Something went wrong", 500)
+
+@frappe.whitelist(allow_guest=True)
+def delete_article(*args, **kwargs):
+    
+    required_fields = ["docname"]
+    validation_error = gf.validate_required(kwargs, required_fields)
+    if validation_error:
+        return gf.response(False, {}, "Failed to delete article", validation_error, "")
+
+    try:
+        # frappe.delete_doc or frappe.db.delete
+        # doc = frappe.get_doc("Article", kwargs.get("docname"))
+        if frappe.db.delete("Article", {"name":kwargs.get("docname")}):
+            return gf.response(True, article, "", "", "")
+        else:
+            # return frappe.get_traceback()
+            return gf.response(False, {}, "Unable to delete article {}".format(kwargs.get("docname")), "Something went wrong", 500)
+    except Exception as e:
+        return gf.response(False, {}, e, "Something went wrong", 500)
+
+def call_a(args, kwargs):
+    return { "m": "from call_a", 'args': args, 'kwargs': kwargs }

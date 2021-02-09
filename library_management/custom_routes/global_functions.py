@@ -78,7 +78,27 @@ def response(success, data, error, message, code):
         if err:
             frappe.local.response.error = err
 
+def log_event():
+    # frappe.utils.logger.set_log_level("DEBUG")
+    # logger = frappe.logger("api", allow_site=True, file_count=50)
+    # user = frappe.session.user
+    # logger.info(f"{user} accessed counter_app.update with value={value}")
 
+    # current_value = frappe.get_single_value("Value", "counter")
+    # updated_value = current_value + value
+    # logger.debug(f"{current_value} + {value} = {updated_value}")
+    # frappe.db.set_value("Value", "Value", "counter", updated_value)
+    # logger.info(f"{user} updated value to {value}")
+
+    frappe.logger(frappe.request.headers.get("User-agent")).debug({
+        "site": "frappeframework.com",
+        "remote_addr": "192.148.1.7",
+        "base_url": "https://frappeframework.com/docs/user/en/api/logging",
+        "full_path": "/docs/user/en/api/logging",
+        "method": "POST",
+        "scheme": "https",
+        "http_status_code": 200
+    })
 
 
 # @frappe.whitelist(allow_guest=True)
