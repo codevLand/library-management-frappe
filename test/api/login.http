@@ -1,0 +1,13 @@
+@api = http://localhost:8000/api/method
+@custom = library_management.custom_routes
+
+POST {{api}}/login HTTP/1.1
+Content-Type: application/json
+
+{"usr":"Administrator","pwd":"0000"}
+
+###
+POST {{api}}/frappe.core.doctype.user.user.generate_keys?user="Administrator" HTTP/1.1
+
+###
+POST {{api}}/logout HTTP/1.1

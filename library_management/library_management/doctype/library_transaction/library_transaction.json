@@ -1,5 +1,4 @@
 {
- "actions": [],
  "autoname": "LT.#####",
  "creation": "2021-01-27 13:06:24.538390",
  "doctype": "DocType",
@@ -53,8 +52,7 @@
   }
  ],
  "is_submittable": 1,
- "links": [],
- "modified": "2021-01-27 13:14:33.715523",
+ "modified": "2021-02-03 15:39:50.778898",
  "modified_by": "Administrator",
  "module": "Library Management",
  "name": "Library Transaction",
@@ -70,6 +68,7 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
+   "submit": 1,
    "write": 1
   },
   {

@@ -1,0 +1,26 @@
+@api = http://localhost:8000/api/method
+@custom = library_management.custom_routes
+@file = article
+@function = article
+@url = {{api}}/{{custom}}.{{file}}.{{function}}
+@secret = e433ce469d8e9dc
+@_key = 64494249acd0494
+
+##########################################
+#   GET via url, passed as args
+##########################################
+
+POST {{url}}?name=article-name HTTP/1.1
+Authorization: token {{_key}}:{{secret}}
+
+##########################################
+#   GET via body, passed as kwargs
+##########################################
+
+POST {{url}} HTTP/1.1
+Authorization: token {{_key}}:{{secret}}
+Content-Type: application/json
+
+{
+   "article_name": "mzx,cnzx"
+}

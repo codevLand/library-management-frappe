@@ -1,0 +1,44 @@
+@api = http://localhost:8000/api/method
+@custom = library_management.custom_routes
+@file = article
+@function = article
+@url = {{api}}/{{custom}}.{{file}}.{{function}}
+
+@secret = e433ce469d8e9dc
+@_key = 64494249acd0494
+
+##########################################
+#   GET via url, passed as args
+##########################################
+
+GET {{url}}?fields=article_name,author,status&order_by="author ASC"  HTTP/1.1
+Authorization: token {{_key}}:{{secret}}
+
+# returns all records (returns ID: name)
+
+
+##########################################
+#   GET via body, passed as kwargs
+#   NOT RECOMMENDED
+##########################################
+
+# ignores unknown fields
+
+# GET {{url}} HTTP/1.1
+# Authorization: token {{api_key}}:{{api_secret}}
+# Content-Type: application/x-www-form-urlencoded
+
+# {
+#     "fields": ["article_name","author"],
+#     "filter": {
+#         "name": "lord-of-the-flies"
+#     }
+}
+
+    # "fields": ["article_name, author, isbn, status"]
+    # "order_by": "name asc"
+    # "start": 0,
+    # "pg_len": 10,
+    # "filter": {
+    #     "article_name": ["like", "%beyond%"]
+    # }

@@ -1,0 +1,40 @@
+@api = http://localhost:8000/api/method
+@custom = library_management.custom_routes
+@file = article
+@function = article
+@url = {{api}}/{{custom}}.{{file}}.{{function}}
+@secret = e433ce469d8e9dc
+@_key = 64494249acd0494
+
+##########################################
+#  PUT via url, passed as args
+#  NOT RECOMMENDED
+##########################################
+
+# PUT {{url}}?name=article-name HTTP/1.1
+
+
+##########################################
+#   PUT via body, passed as kwargs
+##########################################
+
+# ignores unknown fields
+PUT {{url}} HTTP/1.1
+Authorization: token {{_key}}:{{secret}}
+Content-Type: application/json
+
+{
+   "name": "mzxcnzx",
+   "article_name": "Lord of the Flies",
+   "author": "William Golding",
+   "isbn": "978-0399506437",
+   "publisher": " Faber and Faber",
+   "description": "<p><strong>A Casebook Edition containing the full text of LORD OF THE FLIES, plus notes and critical essays</strong><br /><br />The material in this casebook edition of one of the most widely read novels of our time includes not only the full text of LORD OF THE FLIES, but also statements by William Golding about the novel, reminisces of Golding by his brother, an appreciation of the novel by E.M. Forster, and a number of critical essays from various points of vierw. Included are psychological, religious, and literary approaches by noted scholars and studies of the novel's relation to earlier works, as well as to other writings by Golding. The editors have also included bibliographical material and explanatory notes.</p>"
+}
+
+   # "name": "lord-of-the-flies",
+   # "article_name": "Lord of the Flies",
+   # "author": "William Golding",
+   # "isbn": "978-0399506437",
+   # "publisher": " Faber and Faber",
+   # "description": "<p><strong>A Casebook Edition containing the full text of LORD OF THE FLIES, plus notes and critical essays</strong><br /><br />The material in this casebook edition of one of the most widely read novels of our time includes not only the full text of LORD OF THE FLIES, but also statements by William Golding about the novel, reminisces of Golding by his brother, an appreciation of the novel by E.M. Forster, and a number of critical essays from various points of vierw. Included are psychological, religious, and literary approaches by noted scholars and studies of the novel's relation to earlier works, as well as to other writings by Golding. The editors have also included bibliographical material and explanatory notes.</p>"
