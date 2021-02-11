@@ -1,5 +1,7 @@
 import frappe
 
+#  TODO sanitize req input
+
 def remove_this (doctype,args,kwargs) :
 
 	kwargs.pop('cmd', None)

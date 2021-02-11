@@ -14,7 +14,7 @@
 GET {{url}}?fields=article_name,author,status&order_by="author ASC"  HTTP/1.1
 Authorization: token {{_key}}:{{secret}}
 
-# returns all records (returns ID: name)
+# see below for more url options
 
 
 ##########################################
