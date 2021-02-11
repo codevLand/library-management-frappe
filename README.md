@@ -46,7 +46,7 @@ Use API testing tool (e.g. postman, cUrl)
 Simply generate session ID by sending a `POST` request 
 
 ```json
-POST {{api}}/login HTTP/1.1
+POST http://localhost:8000/api/method/login HTTP/1.1
 Content-Type: application/json
 {
    "usr":"Administrator",
