@@ -59,7 +59,7 @@ Content-Type: application/json
    2. Go to `User and Permissions`
    3. Click `User`
    4. Create a new user (librarian) and fill out the form
-   > :warning:*IMPORTANT*: once you saved the new user a prompt will popup with the user's secret key, once the prompt is closed, the secret will not be recoverable. It is recommended that you copy the secret key to a safe staorage.:warning:
+   > :warning:*IMPORTANT*:warning: once you saved the new user a prompt will popup with the user's secret key, once the prompt is closed, the secret will not be recoverable. It is recommended that you copy the secret key to a safe staorage.
    5. Click Settings on the top nav and click reload
    6. Follow steps 2 & 3
    7. Select the newly created user
