@@ -93,23 +93,28 @@ web_include_js = "/assets/library_management/js/article.js"
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"library_management.tasks.all"
-# 	],
-# 	"daily": [
-# 		"library_management.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"library_management.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"library_management.tasks.weekly"
-# 	]
-# 	"monthly": [
-# 		"library_management.tasks.monthly"
-# 	]
-# }
+scheduler_events = {
+    # "all": [
+    #     "library_management.scheduled_tasks.article_tasks.get_articles_all"
+    # ],
+	# "daily": [
+	# 	"library_management.tasks.daily"
+	# ],
+	# "hourly": [
+	# 	"library_management.tasks.hourly"
+	# ],
+	# "weekly": [
+	# 	"library_management.tasks.weekly"
+	# ]
+	# "monthly": [
+	# 	"library_management.tasks.monthly"
+	# ]
+    # "cron": {
+    #     "0/1 * * * *": [
+    #         "library_management.scheduled_tasks.article_tasks.get_articles_cron_minute"
+    #     ]
+    # }
+}
 
 # Testing
 # -------

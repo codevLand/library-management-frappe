@@ -1,4 +1,6 @@
+import json
 import frappe
+import datetime
 
 def validate_required(kwargs, fields):
     for rfield in fields:
@@ -66,6 +68,7 @@ def make_file(args, filename, content):
 
 
 def response(success, data, error, message, code):
+    log_event()
     frappe.local.response.success = success
     frappe.local.response.message = message
     if success:
@@ -73,12 +76,34 @@ def response(success, data, error, message, code):
     else:
         if code:
             frappe.local.response['http_status_code'] = code
+            # frappe.local.message_log = None # remove _server_messages from response
+            # frappe.error_log = None # remove exc from response
+            # frappe.flags.error_message = None # remove _error_message from response
+            # frappe.debug_log = None
+            # frappe.conf["logging"] or frappe.conf.logging = None # remove _debug_messages from response
 
         err = error.message if hasattr(error, 'message') else str(error)
         if err:
             frappe.local.response.error = err
 
 def log_event():
+    print(frappe.local.request)
+
+    # if frappe.local.form_dict.data is None:
+	# 	data = json.loads(frappe.safe_decode(frappe.local.request.get_data()))
+	# else:
+	# 	data = frappe.local.form_dict.data
+	# 	if isinstance(data, string_types):
+	# 		data = json.loads(frappe.local.form_dict.data)
+
+    print({
+        "Url": frappe.local.request.url,
+        "Method": frappe.local.request.method,
+        "Origin": frappe.local.request.headers.get("Host"),
+        "User-agent": frappe.local.request.headers.get("User-agent"),
+        "Date": datetime.datetime.now().strftime("%c"),
+        "Body": frappe.local.request.data
+    })
     # frappe.utils.logger.set_log_level("DEBUG")
     # logger = frappe.logger("api", allow_site=True, file_count=50)
     # user = frappe.session.user
@@ -90,15 +115,15 @@ def log_event():
     # frappe.db.set_value("Value", "Value", "counter", updated_value)
     # logger.info(f"{user} updated value to {value}")
 
-    frappe.logger(frappe.request.headers.get("User-agent")).debug({
-        "site": "frappeframework.com",
-        "remote_addr": "192.148.1.7",
-        "base_url": "https://frappeframework.com/docs/user/en/api/logging",
-        "full_path": "/docs/user/en/api/logging",
-        "method": "POST",
-        "scheme": "https",
-        "http_status_code": 200
-    })
+    # frappe.logger(frappe.request.headers.get("User-agent")).debug({
+    #     "site": "frappeframework.com",
+    #     "remote_addr": "192.148.1.7",
+    #     "base_url": "https://frappeframework.com/docs/user/en/api/logging",
+    #     "full_path": "/docs/user/en/api/logging",
+    #     "method": "POST",
+    #     "scheme": "https",
+    #     "http_status_code": 200
+    # })
 
 
 # @frappe.whitelist(allow_guest=True)

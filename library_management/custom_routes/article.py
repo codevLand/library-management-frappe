@@ -3,8 +3,31 @@ import frappe
 import json
 from library_management.custom_routes import global_functions as gf
 
+
+@frappe.whitelist(allow_guest=True)
+def route(*args, **kwargs):
+
+    print("route", args, kwargs)
+    try:
+        if frappe.request.method == "POST":
+            article(*args, **kwargs)
+        elif frappe.request.method == "GET":
+            get_all(*args, **kwargs)
+        elif frappe.request.method == "PUT":
+            update_article(*args, **kwargs)
+        elif frappe.request.method == "DELETE":
+            delete_article(*args, **kwargs)
+        else:
+            return gf.response(False, {}, "Invalid method.", "Method must be POST, PUT, GET or DELETE.", "")
+    except Exception as e:
+        return gf.response(False, {}, e, "Method must be POST, PUT, GET or DELETE.", 404)
+
+
 @frappe.whitelist(allow_guest=True)
 def article(*args, **kwargs):
+    print("entered creation function")
+
+    print(args, kwargs)
 
     try:
         doctype = "Article"
@@ -25,38 +48,12 @@ def article(*args, **kwargs):
             "payload": kwargs
         })
 
+        article = create_article(args, kwargs)
         images = gf.add_images(kwargs)
-
-        print("creating document...")
-        article = frappe.new_doc(doctype)
-
-        if kwargs.get("article_name"):
-            article.article_name = kwargs.get("article_name")
-
-        if kwargs.get("author"):
-            article.author = kwargs.get("author")
-
-        if kwargs.get("status"):
-            article.status = kwargs.get("status")
-
-        if kwargs.get("isbn"):
-            article.isbn = kwargs.get("isbn")
-
-        if kwargs.get("publisher"):
-            article.publisher = kwargs.get("publisher")
-
-        if kwargs.get("published"):
-            article.published = kwargs.get("published")
-
-        if kwargs.get("route"):
-            article.route = kwargs.get("route")
-
-        if kwargs.get("description"):
-            article.description = kwargs.get("description")
-
         article.image = images[0].file_url if len(images) > 0 else None
-
-        article.insert()
+        article.save()
+        print("creating document...")
+        
 
         # article.submit()
         return gf.response(True, article, "", "Created successfully.", "")
@@ -65,9 +62,40 @@ def article(*args, **kwargs):
         return gf.response(False, {}, e, "Something went wrong", 500)
 
 
+def create_article(*args, **kwargs):
+    article = frappe.new_doc("Article")
+
+    if kwargs.get("article_name"):
+        article.article_name = kwargs.get("article_name")
+
+    if kwargs.get("author"):
+        article.author = kwargs.get("author")
+
+    if kwargs.get("status"):
+        article.status = kwargs.get("status")
+
+    if kwargs.get("isbn"):
+        article.isbn = kwargs.get("isbn")
+
+    if kwargs.get("publisher"):
+        article.publisher = kwargs.get("publisher")
+
+    if kwargs.get("published"):
+        article.published = kwargs.get("published")
+
+    if kwargs.get("route"):
+        article.route = kwargs.get("route")
+
+    if kwargs.get("description"):
+        article.description = kwargs.get("description")
+
+    article.insert()
+    
+    return article
+
 @frappe.whitelist(allow_guest=True)
 def update_article(*args, **kwargs):
-
+    print("entered updating function")
     try:
         doctype = "Article"
         if frappe.request.method not in ["PUT"]:
@@ -125,7 +153,7 @@ def update_article(*args, **kwargs):
 
 @frappe.whitelist(allow_guest=True)
 def get_one(*args, **kwargs):
-
+    print("entered get one function")
     try:
         required_fields = ["docname"]
         validation_error = gf.validate_required(kwargs, required_fields)
@@ -146,6 +174,7 @@ def get_one(*args, **kwargs):
 
 @frappe.whitelist(allow_guest=True)
 def get_all(*args, **kwargs):
+    print("entered get all function")
     try:
         doctype = "Article"
         if frappe.request.method != "GET":
@@ -196,7 +225,7 @@ def get_all(*args, **kwargs):
         if len(args) > 0:
             return article
         else:
-            return gf.response(True, article, "", "", "")
+            return gf.response(True, article, "", None, "")
 
     except Exception as e:
         if len(args) > 0:
@@ -206,20 +235,31 @@ def get_all(*args, **kwargs):
 
 @frappe.whitelist(allow_guest=True)
 def delete_article(*args, **kwargs):
-    
+    print("entered deletion function", args, kwargs)
+
     required_fields = ["docname"]
     validation_error = gf.validate_required(kwargs, required_fields)
     if validation_error:
         return gf.response(False, {}, "Failed to delete article", validation_error, "")
 
     try:
+        
         # frappe.delete_doc or frappe.db.delete
-        # doc = frappe.get_doc("Article", kwargs.get("docname"))
-        if frappe.db.delete("Article", {"name":kwargs.get("docname")}):
-            return gf.response(True, article, "", "", "")
-        else:
-            # return frappe.get_traceback()
-            return gf.response(False, {}, "Unable to delete article {}".format(kwargs.get("docname")), "Something went wrong", 500)
+        doc = frappe.get_doc("Article", kwargs.get("docname"))
+        if not doc:
+            return gf.response(False, {}, "Unable to delete article {}".format(kwargs.get("docname")), "Article does not exist", 404)
+
+        # print(doc.delete())
+        # doc.delete()
+        # doc.save()
+        # if doc.delete():
+        frappe.db.delete("Article", { "name" : kwargs.get("docname") })
+        frappe.db.commit()
+        # frappe.db.delete("Article", {"name":kwargs.get("docname")})
+        return gf.response(True, doc, {}, "Article was deleted successfully.", "")
+        # else:
+        #     # return frappe.get_traceback()
+        #     return gf.response(False, {}, "Unable to delete article {}".format(kwargs.get("docname")), "Something went wrong", 500)
     except Exception as e:
         return gf.response(False, {}, e, "Something went wrong", 500)
 
